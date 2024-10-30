@@ -43,7 +43,8 @@ public class UfoGameView extends JFrame implements UfoGameInterface.View {
     }
 
     private void createUfoGameBody(){
-        ufoGameBody = new UfoGameBody(this);
+        bodyCardLayout = new CardLayout();
+        ufoGameBody = new UfoGameBody(this,bodyCardLayout);
         this.add(ufoGameBody);
     }
 

@@ -24,33 +24,34 @@ public class UfoGameHeader extends JPanel{
     private void initPanel(){
         this.setBackground(GlobalView.HEADER_MENU_BACKGROUND);
         this.setForeground(GlobalView.HEADER_MENU_FOREGROUND);
-        this.setPreferredSize(new Dimension(0,100));
+        this.setPreferredSize(new Dimension(0,70));
         this.setBorder(BorderFactory.createMatteBorder(0,0,1,0, GlobalView.BORDER_COLOR));
         this.setLayout(null);
     }
 
     private void createSettingsBtn(){
-        RoundedButton geograficalAnalysisBtn = new RoundedButton("<html><div style='text-align: center;'>Opciones</html>", 20);
-        geograficalAnalysisBtn.setBounds(10, 10, 100, 80);
-        geograficalAnalysisBtn.setBackground(GlobalView.BTN_BACKGROUND);
-        geograficalAnalysisBtn.setForeground(GlobalView.BTN_TEXT_BACKGROUND);
-        geograficalAnalysisBtn.addActionListener(new ActionListener() {
+        RoundedButton settingsBtn = new RoundedButton("<html><div style='text-align: center;'>Menu</html>", 20);
+        settingsBtn.setBounds(10, 10, 80, 50);
+        settingsBtn.setBackground(GlobalView.BTN_BACKGROUND);
+        settingsBtn.setForeground(GlobalView.BTN_TEXT_BACKGROUND);
+        settingsBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-               
+               ufoGameView.getBodyCardLayout().show(ufoGameView.getUfoGameBody(), "Menu");
             }
         });
-        this.add(geograficalAnalysisBtn);
+        this.add(settingsBtn);
     }
+
     private void createExitBtn(){
-        RoundedButton vehicleAnalysisBtn = new RoundedButton("<html><div style='text-align: center;'>Salir</html>", 20);
-        vehicleAnalysisBtn.setBounds(200, 10, 100, 80);
-        vehicleAnalysisBtn.setBackground(GlobalView.BTN_BACKGROUND);
-        vehicleAnalysisBtn.setForeground(GlobalView.BTN_TEXT_BACKGROUND);
-        vehicleAnalysisBtn.addActionListener(new ActionListener() {
+        RoundedButton exitBtn = new RoundedButton("<html><div style='text-align: center;'>X</html>", 20);
+        exitBtn.setBounds(440, 10, 50, 50);
+        exitBtn.setBackground(GlobalView.BTN_BACKGROUND);
+        exitBtn.setForeground(GlobalView.BTN_TEXT_BACKGROUND);
+        exitBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
-                
+                System.exit(0);
             }
         });
-        this.add(vehicleAnalysisBtn);
+        this.add(exitBtn);
     }
 }
