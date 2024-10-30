@@ -11,5 +11,4 @@ public class UfoGameBody extends JPanel{
         this.ufoGameView = ufoGameView;
     }
 
-
 }
