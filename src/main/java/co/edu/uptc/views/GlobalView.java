@@ -13,7 +13,15 @@ public class GlobalView {
     public static Color BODY_PLAY_FOREGROUND = new Color(0xfffff);
 
     public static Color BTN_BACKGROUND = new Color(0x4e0d93);
-    public static Color BTN_TEXT_BACKGROUND = new Color(0xffffff);
+    public static Color BTN_FOREGROUND = new Color(0xffffff);
+
+    public static Color SECUNDARY_BTN_BACKGROUND = new Color(0x202426);
+    public static Color SECUNDARY_BTN_TEXT_BACKGROUND = Color.white;
     
     public static Color BORDER_COLOR = new Color(0x000000);
+
+    public static Color PLACEHOLDER_TEXT_COLOR = Color.gray;
+    public static Color TEXT_COLOR = Color.black;
+
+    
 }

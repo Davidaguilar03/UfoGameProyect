@@ -33,7 +33,7 @@ public class UfoGameHeader extends JPanel{
         RoundedButton settingsBtn = new RoundedButton("<html><div style='text-align: center;'>Menu</html>", 20);
         settingsBtn.setBounds(10, 10, 80, 50);
         settingsBtn.setBackground(GlobalView.BTN_BACKGROUND);
-        settingsBtn.setForeground(GlobalView.BTN_TEXT_BACKGROUND);
+        settingsBtn.setForeground(GlobalView.BTN_FOREGROUND);
         settingsBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                ufoGameView.getBodyCardLayout().show(ufoGameView.getUfoGameBody(), "Menu");
@@ -46,7 +46,7 @@ public class UfoGameHeader extends JPanel{
         RoundedButton exitBtn = new RoundedButton("<html><div style='text-align: center;'>X</html>", 20);
         exitBtn.setBounds(440, 10, 50, 50);
         exitBtn.setBackground(GlobalView.BTN_BACKGROUND);
-        exitBtn.setForeground(GlobalView.BTN_TEXT_BACKGROUND);
+        exitBtn.setForeground(GlobalView.BTN_FOREGROUND);
         exitBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 System.exit(0);

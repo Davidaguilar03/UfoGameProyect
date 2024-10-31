@@ -33,7 +33,7 @@ public class UfoGamePlayHeader extends JPanel{
         RoundedButton exitBtn = new RoundedButton("<html><div style='text-align: center;'>X</html>", 20);
         exitBtn.setBounds(940, 10, 50, 50);
         exitBtn.setBackground(GlobalView.BTN_BACKGROUND);
-        exitBtn.setForeground(GlobalView.BTN_TEXT_BACKGROUND);
+        exitBtn.setForeground(GlobalView.BTN_FOREGROUND);
         exitBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e){
                 System.exit(0);
