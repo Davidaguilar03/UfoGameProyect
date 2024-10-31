@@ -13,7 +13,6 @@ public class UfoGamePlayBody extends JPanel{
     private UfoGamePlayView ufoGamePlayView;
     private PropertiesService propertiesService;
     private JPanel playBodyPanel;
-    private JPanel pauseBodyPanel;
 
     public UfoGamePlayBody(UfoGamePlayView ufoGamePlayView,CardLayout cardLayout){
         propertiesService= new PropertiesService();
@@ -23,7 +22,7 @@ public class UfoGamePlayBody extends JPanel{
     }
 
     private void initPlayPanel(){
-        playBodyPanel = new ImagePanel(propertiesService.getKeyValue("PlayBackground"),0.8f);
+        playBodyPanel = new ImagePanel(propertiesService.getKeyValue("PlayBackground"),0.85f);
         playBodyPanel.setForeground(GlobalView.BODY_MENU_FOREGROUND);
         playBodyPanel.setLayout(null);
         this.add(playBodyPanel,"PlayBody");

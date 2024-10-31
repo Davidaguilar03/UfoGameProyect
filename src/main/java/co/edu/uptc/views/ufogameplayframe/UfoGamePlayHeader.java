@@ -18,7 +18,6 @@ public class UfoGamePlayHeader extends JPanel{
     public UfoGamePlayHeader(UfoGamePlayView ufoGamePlayView){
         this.ufoGamePlayView=ufoGamePlayView;
         this.initPanel();
-        this.createSettingsBtn();
         this.createExitBtn();
     }
 
@@ -28,19 +27,6 @@ public class UfoGamePlayHeader extends JPanel{
         this.setPreferredSize(new Dimension(0,70));
         this.setBorder(BorderFactory.createMatteBorder(0,0,1,0, GlobalView.BORDER_COLOR));
         this.setLayout(null);
-    }
-
-    private void createSettingsBtn(){
-        RoundedButton settingsBtn = new RoundedButton("<html><div style='text-align: center;'>Menu</html>", 20);
-        settingsBtn.setBounds(10, 10, 80, 50);
-        settingsBtn.setBackground(GlobalView.BTN_BACKGROUND);
-        settingsBtn.setForeground(GlobalView.BTN_TEXT_BACKGROUND);
-        settingsBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-               
-            }
-        });
-        this.add(settingsBtn);
     }
 
     private void createExitBtn(){
