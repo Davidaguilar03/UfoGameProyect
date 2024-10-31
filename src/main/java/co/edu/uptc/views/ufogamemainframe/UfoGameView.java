@@ -32,7 +32,7 @@ public class UfoGameView extends JFrame implements UfoGameInterface.View {
     private void initFrame(){
         this.setUndecorated(true);
         this.setLayout((LayoutManager) new BorderLayout());
-        this.setSize(500,500);
+        this.setSize(500,550);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
