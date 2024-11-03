@@ -1,7 +1,6 @@
 package co.edu.uptc.pojos;
-import java.awt.Point;
-import java.util.Random;
 
+import java.awt.Point;
 import lombok.Data;
 
 @Data
@@ -10,41 +9,13 @@ public class Ufo {
     private int speed; 
     private double angle;
     private boolean isMoving; 
-    private Random random;
 
-    public Ufo(int speed) {
-        this.random = new Random();
-        this.position = new Point(getRandomX(), getRandomY());
+    public Ufo(int speed, Point position, double angle) {
+        this.position = position;
         this.speed = speed; 
-        this.angle = getRandomAngle();
+        this.angle = angle;
         this.isMoving = true;
     }
-
-    private int getRandomX() {
-        return random.nextInt(1125); 
-    }
-
-    private int getRandomY() {
-        return random.nextInt(632);
-    }
-
-    private double getRandomAngle() {
-        return random.nextDouble() * 2 * Math.PI; 
-    }
-
-    public void move() {
-        if (isMoving) {
-            int deltaX = (int) (speed * Math.cos(angle));
-            int deltaY = (int) (speed * Math.sin(angle));
-            position.translate(deltaX, deltaY);
-            checkCollision();
-        }
-    }
-
-    private void checkCollision() {
-        if (position.x < 0 || position.x > 1125 || position.y < 0 || position.y > 632) {
-            isMoving = false; 
-        }
-    }
 }
+
 

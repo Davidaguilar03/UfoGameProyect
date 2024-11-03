@@ -18,7 +18,8 @@ public class UfoGameModel implements UfoGameInterface.Model {
 
     @Override
     public void addUfo(int speed){
-        Ufo newUfo = new Ufo(speed);
+        UfoController ufoController = new UfoController();
+        Ufo newUfo = ufoController.createUfo(speed);
         Ufos.add(newUfo);
     }
 
@@ -41,7 +42,8 @@ public class UfoGameModel implements UfoGameInterface.Model {
 
     public void moveAll() {
         for (Ufo Ufo : Ufos) {
-            Ufo.move();
+            UfoController ufoController = new UfoController();
+            ufoController.moveUfo(Ufo);
         }
     }
 }
