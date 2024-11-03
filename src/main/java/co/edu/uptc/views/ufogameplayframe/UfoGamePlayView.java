@@ -29,7 +29,7 @@ public class UfoGamePlayView extends JFrame{
     private void initFrame(){
         this.setUndecorated(true);
         this.setLayout((LayoutManager) new BorderLayout());
-        this.setSize(1000,700);
+        this.setSize(1200,786);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
