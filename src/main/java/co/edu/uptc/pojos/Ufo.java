@@ -21,11 +21,11 @@ public class Ufo {
     }
 
     private int getRandomX() {
-        return random.nextInt(1150); 
+        return random.nextInt(1125); 
     }
 
     private int getRandomY() {
-        return random.nextInt(636);
+        return random.nextInt(632);
     }
 
     private double getRandomAngle() {
@@ -42,7 +42,7 @@ public class Ufo {
     }
 
     private void checkCollision() {
-        if (position.x < 0 || position.x > 1150 || position.y < 0 || position.y > 636) {
+        if (position.x < 0 || position.x > 1125 || position.y < 0 || position.y > 632) {
             isMoving = false; 
         }
     }

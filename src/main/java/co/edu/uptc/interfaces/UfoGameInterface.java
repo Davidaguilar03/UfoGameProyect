@@ -7,13 +7,14 @@ import co.edu.uptc.pojos.Ufo;
 public class UfoGameInterface {
 
     public interface Model {
-        public void setPresenter(Presenter presenter);
 
         public void addUfo(int speed);
 
+        public void startGame();
+
         public List<Ufo> getUfos();
 
-        public void startGame();
+        public void setPresenter(Presenter presenter);
     }
 
     public interface View {

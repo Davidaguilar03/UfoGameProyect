@@ -1,5 +1,4 @@
 package co.edu.uptc.models;
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,17 +11,9 @@ import lombok.Data;
 public class UfoGameModel implements UfoGameInterface.Model {
     private UfoGameInterface.Presenter presenter;
     private List<Ufo> Ufos;
-    private Image UfoImage;
-    private int spawnRate;
 
     public UfoGameModel() {
         this.Ufos = new ArrayList<>();
-    }
-
-    public void addUfos(int number, int speed) {
-        for (int i = 0; i < number; i++) {
-            addUfo(speed);
-        }
     }
 
     @Override
@@ -31,18 +22,21 @@ public class UfoGameModel implements UfoGameInterface.Model {
         Ufos.add(newUfo);
     }
 
+    @Override
     public void startGame() {
         UfoRunner ufoRunner = new UfoRunner(this);
         Thread thread = new Thread(ufoRunner);
         thread.start();
     }
-
-    public void setUfoImage(Image UfoImage) {
-        this.UfoImage = UfoImage;
+    
+    @Override
+    public List<Ufo> getUfos() {
+        return Ufos;
     }
 
-    public void setSpawnRate(int spawnRate) {
-        this.spawnRate = spawnRate;
+    @Override
+    public void setPresenter(Presenter presenter) {
+        this.presenter=presenter;
     }
 
     public void moveAll() {
@@ -50,14 +44,4 @@ public class UfoGameModel implements UfoGameInterface.Model {
             Ufo.move();
         }
     }
-
-    public void setPresenter(Presenter presenter) {
-        this.presenter=presenter;
-    }
-
-    @Override
-    public List<Ufo> getUfos() {
-        return Ufos;
-    }
-
 }
