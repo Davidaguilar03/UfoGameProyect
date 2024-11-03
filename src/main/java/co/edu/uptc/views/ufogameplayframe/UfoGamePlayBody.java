@@ -6,8 +6,6 @@ import co.edu.uptc.pojos.Ufo;
 import co.edu.uptc.utilities.ImagePanel;
 import co.edu.uptc.utilities.PropertiesService;
 import co.edu.uptc.views.GlobalView;
-
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Timer;
 
@@ -23,11 +21,9 @@ public class UfoGamePlayBody extends JPanel{
     public UfoGamePlayBody(UfoGamePlayView ufoGamePlayView){
         propertiesService= new PropertiesService();
         this.ufoGamePlayView=ufoGamePlayView;
-        this.ufos= new ArrayList<>();
+        this.ufos= ufoGamePlayView.getUfoGameView().getPresenter().getUfos();
         this.setLayout(null);
         this.initPlayPanel();
-        timer = new Timer(50, e -> updateUFOs());
-        timer.start();
     }
 
     private void initPlayPanel(){
@@ -46,23 +42,8 @@ public class UfoGamePlayBody extends JPanel{
         this.add(playBodyPanel);
     }
 
-    public void addUFO(Ufo ufo) {
-        ufos.add(ufo);
-        playBodyPanel.repaint();
-    }
-
-    private void updateUFOs() {
-        for (Ufo ufo : ufos) {
-            ufo.move();
-        }
+    public void updateUFOs() {
         playBodyPanel.repaint(); 
-    }
-
-    public void removeUFO(int index) {
-        if (index >= 0 && index < ufos.size()) {
-            ufos.remove(index);
-            playBodyPanel.repaint();
-        }
     }
 }
 

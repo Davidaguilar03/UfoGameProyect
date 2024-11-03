@@ -25,14 +25,15 @@ public class UfoGameModel implements UfoGameInterface.Model {
         }
     }
 
+    @Override
     public void addUfo(int speed){
         Ufo newUfo = new Ufo(speed);
         Ufos.add(newUfo);
     }
 
     public void startGame() {
-        UfoAnimation ufoAnimation = new UfoAnimation(this);
-        Thread thread = new Thread(ufoAnimation);
+        UfoRunner ufoRunner = new UfoRunner(this);
+        Thread thread = new Thread(ufoRunner);
         thread.start();
     }
 
@@ -54,6 +55,7 @@ public class UfoGameModel implements UfoGameInterface.Model {
         this.presenter=presenter;
     }
 
+    @Override
     public List<Ufo> getUfos() {
         return Ufos;
     }

@@ -37,6 +37,7 @@ public class UfoGameBody extends JPanel {
     private JTextField txtUfosSpeed;
     private CardLayout cardLayout;
     private Checkbox trayectoryCheckbox;
+    private UfoGamePlayView ufoGamePlayView;
 
     public UfoGameBody(UfoGameView ufoGameView, CardLayout cardLayout) {
         propertiesService = new PropertiesService();
@@ -85,7 +86,7 @@ public class UfoGameBody extends JPanel {
     }
 
     public void createUfoGamePlayView() {
-        UfoGamePlayView ufoGamePlayView = new UfoGamePlayView(ufoGameView);
+        ufoGamePlayView = new UfoGamePlayView(ufoGameView);
         ufoGamePlayView.begin();
     }
 

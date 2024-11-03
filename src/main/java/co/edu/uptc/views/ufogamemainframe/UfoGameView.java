@@ -54,6 +54,11 @@ public class UfoGameView extends JFrame implements UfoGameInterface.View {
         this.presenter = presenter;
     }
 
+    @Override
+    public void updateUFOs() {
+        ufoGameBody.getUfoGamePlayView().updateUFOs();
+    }
+
     
 
 }

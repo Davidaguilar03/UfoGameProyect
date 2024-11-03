@@ -1,8 +1,8 @@
 package co.edu.uptc.models;
 
-public class UfoAnimation implements Runnable {
+public class UfoRunner implements Runnable {
     private UfoGameModel ufoGameModel;
-    public UfoAnimation(UfoGameModel ufoGameModel) {
+    public UfoRunner(UfoGameModel ufoGameModel) {
         this.ufoGameModel = ufoGameModel;
     }
 
@@ -10,6 +10,7 @@ public class UfoAnimation implements Runnable {
     public void run() {
         while (true) {
             ufoGameModel.moveAll();
+            ufoGameModel.getPresenter().updateUFOs();
             try {
                 Thread.sleep(50); 
             } catch (InterruptedException e) {

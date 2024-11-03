@@ -1,8 +1,6 @@
 package co.edu.uptc.views.ufogameplayframe;
 
 import javax.swing.JFrame;
-
-import co.edu.uptc.pojos.Ufo;
 import co.edu.uptc.views.ufogamemainframe.UfoGameView;
 import lombok.Getter;
 import java.awt.LayoutManager;
@@ -18,13 +16,12 @@ public class UfoGamePlayView extends JFrame{
         this.initFrame();
         this.createUfoGamePlayBody();
         this.createUfoGamePlayHeader();
+        ufoGameView.getPresenter().startGame();
     }
 
     public void begin(){
         for (int i = 0; i < 5; i++) { 
-            int speed = 5; 
-            Ufo ufo = new Ufo(speed);
-            ufoGamePlayBody.addUFO(ufo);
+            ufoGameView.getPresenter().addUfo(i);
         }
         this.setVisible(true);
     }
@@ -45,5 +42,9 @@ public class UfoGamePlayView extends JFrame{
     private void createUfoGamePlayBody(){
         ufoGamePlayBody = new UfoGamePlayBody(this);
         this.add(ufoGamePlayBody,BorderLayout.CENTER);
+    }
+
+    public void updateUFOs() {
+        ufoGamePlayBody.updateUFOs();
     }
 }
