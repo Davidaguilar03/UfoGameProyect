@@ -20,10 +20,6 @@ public class UfoGamePlayView extends JFrame{
     }
 
     public void begin(){
-        // Prueba 
-        for (int i = 0; i < 20; i++) { 
-            ufoGameView.getPresenter().addUfo(5);
-        }
         this.setVisible(true);
     }
 

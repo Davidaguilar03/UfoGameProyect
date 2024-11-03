@@ -17,12 +17,15 @@ import co.edu.uptc.views.ufogameplayframe.UfoGamePlayView;
 
 import java.awt.CardLayout;
 import java.awt.Checkbox;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import lombok.Getter;
 
@@ -38,6 +41,10 @@ public class UfoGameBody extends JPanel {
     private CardLayout cardLayout;
     private Checkbox trayectoryCheckbox;
     private UfoGamePlayView ufoGamePlayView;
+    private int numberofUfos;
+    private int speed;
+    private String selectedUfoImage;
+    private Map<JLabel, String> imageLabelMap = new HashMap<>();
 
     public UfoGameBody(UfoGameView ufoGameView, CardLayout cardLayout) {
         propertiesService = new PropertiesService();
@@ -45,6 +52,9 @@ public class UfoGameBody extends JPanel {
         this.setLayout(cardLayout);
         this.initPlayPanel();
         this.initMenuPanel();
+        selectedUfoImage = propertiesService.getKeyValue("UFO1-OFF");
+        numberofUfos=3;
+        speed=3;
     }
 
     private void initPlayPanel() {
@@ -78,6 +88,7 @@ public class UfoGameBody extends JPanel {
         playBtn.setForeground(GlobalView.BTN_FOREGROUND);
         playBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                addUfos();
                 createUfoGamePlayView();
                 SwingUtilities.getWindowAncestor(playPanel).dispose();
             }
@@ -208,11 +219,13 @@ public class UfoGameBody extends JPanel {
             propertiesService.getKeyValue("UFO2-OFF"),
             propertiesService.getKeyValue("UFO3-OFF"),
         };
+        selectedUfoImage = imagePaths[0]; 
         for (String imagePath : imagePaths) {
             ImageIcon imageIcon = new ImageIcon(imagePath);
             Image scaledImage = imageIcon.getImage().getScaledInstance(125, 90, Image.SCALE_SMOOTH);
             JLabel label = new JLabel(new ImageIcon(scaledImage));
             ufoImageSelector.add(label, imagePath);
+            imageLabelMap.put(label, imagePath);
         }
         RoundedButton prevButton = new RoundedButton("Anterior",20);
         prevButton.setBackground(GlobalView.BTN_BACKGROUND);
@@ -224,12 +237,14 @@ public class UfoGameBody extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.previous(ufoImageSelector);
+                updateSelectedImage(ufoImageSelector); 
             }
         });
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.next(ufoImageSelector);
+                updateSelectedImage(ufoImageSelector); 
             }
         });
         JPanel buttonPanel = new JPanel();
@@ -239,6 +254,15 @@ public class UfoGameBody extends JPanel {
         buttonPanel.setOpaque(false);
         menuPanel.add(buttonPanel);
         menuPanel.add(ufoImageSelector);
+    }
+
+    private void updateSelectedImage(JPanel ufoImageSelector) {
+        for (Component component : ufoImageSelector.getComponents()) {
+            if (component.isVisible()) {
+                selectedUfoImage = imageLabelMap.get(component);
+                break;
+            }
+        }
     }
     
     
@@ -250,8 +274,21 @@ public class UfoGameBody extends JPanel {
         backBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 ufoGameView.getBodyCardLayout().show(ufoGameView.getUfoGameBody(), "Play");
+                saveSettings();
             }
         });
         menuPanel.add(backBtn);
+    }
+
+    public void saveSettings() {
+        numberofUfos = Integer.parseInt(txtUfosAmount.getText());
+        speed = Integer.parseInt(txtUfosSpeed.getText());
+        addUfos();
+    }
+
+    private void addUfos(){
+        for (int i = 0; i < numberofUfos; i++) {
+            ufoGameView.getPresenter().addUfo(speed);
+        }
     }
 }
