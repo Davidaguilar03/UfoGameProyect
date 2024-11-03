@@ -1,18 +1,19 @@
 package co.edu.uptc.models;
 
 public class UfoAnimation implements Runnable {
-    private UfoGameModel controller;
+    private UfoGameModel ufoGameModel;
+    private int spawnRate;
 
-    public UfoAnimation(UfoGameModel controller) {
-        this.controller = controller;
+    public UfoAnimation(UfoGameModel ufoGameModel, int spawnRate) {
+        this.ufoGameModel = ufoGameModel;
     }
 
     @Override
     public void run() {
         while (true) {
-            controller.moveAll();
+            ufoGameModel.moveAll();
             try {
-                Thread.sleep(50); 
+                Thread.sleep(spawnRate); 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
