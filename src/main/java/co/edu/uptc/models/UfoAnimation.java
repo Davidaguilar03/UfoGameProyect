@@ -2,9 +2,7 @@ package co.edu.uptc.models;
 
 public class UfoAnimation implements Runnable {
     private UfoGameModel ufoGameModel;
-    private int spawnRate;
-
-    public UfoAnimation(UfoGameModel ufoGameModel, int spawnRate) {
+    public UfoAnimation(UfoGameModel ufoGameModel) {
         this.ufoGameModel = ufoGameModel;
     }
 
@@ -13,7 +11,7 @@ public class UfoAnimation implements Runnable {
         while (true) {
             ufoGameModel.moveAll();
             try {
-                Thread.sleep(spawnRate); 
+                Thread.sleep(50); 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

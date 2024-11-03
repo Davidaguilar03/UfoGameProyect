@@ -2,18 +2,16 @@ package co.edu.uptc.views.ufogameplayframe;
 
 import javax.swing.JFrame;
 
+import co.edu.uptc.pojos.Ufo;
 import co.edu.uptc.views.ufogamemainframe.UfoGameView;
 import lombok.Getter;
 import java.awt.LayoutManager;
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
-
 @Getter
 public class UfoGamePlayView extends JFrame{
     private UfoGameView ufoGameView;
     private UfoGamePlayHeader ufoGamePlayHeader;
     private UfoGamePlayBody ufoGamePlayBody;
-    private CardLayout bodyCardLayout;
 
     public UfoGamePlayView(UfoGameView ufoGameView){
         this.ufoGameView=ufoGameView;
@@ -23,13 +21,18 @@ public class UfoGamePlayView extends JFrame{
     }
 
     public void begin(){
+        for (int i = 0; i < 5; i++) { 
+            int speed = 5; 
+            Ufo ufo = new Ufo(speed);
+            ufoGamePlayBody.addUFO(ufo);
+        }
         this.setVisible(true);
     }
 
     private void initFrame(){
         this.setUndecorated(true);
         this.setLayout((LayoutManager) new BorderLayout());
-        this.setSize(1200,786);
+        this.setSize(1200,756);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
     }
@@ -40,8 +43,7 @@ public class UfoGamePlayView extends JFrame{
     }
 
     private void createUfoGamePlayBody(){
-        bodyCardLayout = new CardLayout();
-        ufoGamePlayBody = new UfoGamePlayBody(this,bodyCardLayout);
-        this.add(ufoGamePlayBody);
+        ufoGamePlayBody = new UfoGamePlayBody(this);
+        this.add(ufoGamePlayBody,BorderLayout.CENTER);
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import co.edu.uptc.interfaces.UfoGameInterface;
 import co.edu.uptc.interfaces.UfoGameInterface.Presenter;
+import co.edu.uptc.pojos.Ufo;
 import lombok.Data;
 
 @Data
@@ -20,19 +21,17 @@ public class UfoGameModel implements UfoGameInterface.Model {
 
     public void addUfos(int number, int speed) {
         for (int i = 0; i < number; i++) {
-            Ufo newUfo = new Ufo(speed);
-            Ufos.add(newUfo);
+            addUfo(speed);
         }
     }
 
-    public void moveAll() {
-        for (Ufo Ufo : Ufos) {
-            Ufo.move();
-        }
+    public void addUfo(int speed){
+        Ufo newUfo = new Ufo(speed);
+        Ufos.add(newUfo);
     }
 
     public void startGame() {
-        UfoAnimation ufoAnimation = new UfoAnimation(this, spawnRate);
+        UfoAnimation ufoAnimation = new UfoAnimation(this);
         Thread thread = new Thread(ufoAnimation);
         thread.start();
     }
@@ -43,6 +42,12 @@ public class UfoGameModel implements UfoGameInterface.Model {
 
     public void setSpawnRate(int spawnRate) {
         this.spawnRate = spawnRate;
+    }
+
+    public void moveAll() {
+        for (Ufo Ufo : Ufos) {
+            Ufo.move();
+        }
     }
 
     public void setPresenter(Presenter presenter) {

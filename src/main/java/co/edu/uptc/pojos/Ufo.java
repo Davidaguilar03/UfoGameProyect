@@ -1,4 +1,4 @@
-package co.edu.uptc.models;
+package co.edu.uptc.pojos;
 import java.awt.Point;
 import java.util.Random;
 
@@ -13,19 +13,19 @@ public class Ufo {
     private Random random;
 
     public Ufo(int speed) {
+        this.random = new Random();
         this.position = new Point(getRandomX(), getRandomY());
         this.speed = speed; 
         this.angle = getRandomAngle();
         this.isMoving = true;
-        this.random = new Random();
     }
 
     private int getRandomX() {
-        return random.nextInt(1200); 
+        return random.nextInt(1150); 
     }
 
     private int getRandomY() {
-        return random.nextInt(686);
+        return random.nextInt(636);
     }
 
     private double getRandomAngle() {
@@ -42,7 +42,7 @@ public class Ufo {
     }
 
     private void checkCollision() {
-        if (position.x < 0 || position.x > 1200 || position.y < 0 || position.y > 686) {
+        if (position.x < 0 || position.x > 1150 || position.y < 0 || position.y > 636) {
             isMoving = false; 
         }
     }
