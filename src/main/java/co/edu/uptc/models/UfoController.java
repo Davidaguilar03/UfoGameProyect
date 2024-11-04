@@ -67,19 +67,34 @@ public class UfoController {
 
     private void followTrajectory(Ufo ufo) {
         Point currentPos = ufo.getPosition();
-        Point targetPos = ufo.getNextPoint();
-        int deltaX = targetPos.x - currentPos.x;
-        int deltaY = targetPos.y - currentPos.y;
-        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        double angle = Math.atan2(deltaY, deltaX);
-        ufo.updateAngle(angle);
-        double step = Math.min(ufo.getSpeed(), distance);
-        int moveX = (int) (step * Math.cos(angle));
-        int moveY = (int) (step * Math.sin(angle));
-        currentPos.translate(moveX, moveY);
-        if (distance <= ufo.getSpeed()) {
-            currentPos.setLocation(targetPos);
-            ufo.removeReachedPoint();
+        double speed = Math.max(ufo.getSpeed(), 2); 
+        
+        if (!ufo.getTrajectory().isEmpty()) {
+            Point targetPos = ufo.getNextPoint();
+            int deltaX = targetPos.x - currentPos.x;
+            int deltaY = targetPos.y - currentPos.y;
+            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            
+            if (distance > 0) {
+                double angle = Math.atan2(deltaY, deltaX);
+                ufo.updateAngle(angle);
+                double increasedSpeed = speed * 1.5; 
+                double normalizedSpeed = Math.min(increasedSpeed, distance);
+                int moveX = (int) (normalizedSpeed * Math.cos(angle));
+                int moveY = (int) (normalizedSpeed * Math.sin(angle));
+                currentPos.translate(moveX, moveY);
+                
+                if (distance <= increasedSpeed) {
+                    currentPos.setLocation(targetPos);
+                    ufo.removeReachedPoint(); 
+                }
+            }
+        } else {
+            double angle = ufo.getLastAngle();
+            int moveX = (int) (speed * Math.cos(angle));
+            int moveY = (int) (speed * Math.sin(angle));
+            currentPos.translate(moveX, moveY);
         }
-    }   
+    }
+    
 }

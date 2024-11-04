@@ -45,13 +45,14 @@ public class UfoGamePresenter implements UfoGameInterface.Presenter {
 
     @Override
     public void setSpeed(int speed) {
-        model.setSpeed(speed);
+        model.setSpeed(Math.max(speed, 2)); 
     }
 
     @Override
     public void setNumberofUfos(int numberofUfos) {
         model.setNumberofUfos(numberofUfos);
     }
+
 
     @Override
     public void incrementCrashedUfoCount() {

@@ -13,7 +13,7 @@ public class UfoRunner implements Runnable {
             ufoGameModel.moveAll(); 
             ufoGameModel.getPresenter().updateUFOs(); 
             try {
-                Thread.sleep(50); 
+                Thread.sleep(20); 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

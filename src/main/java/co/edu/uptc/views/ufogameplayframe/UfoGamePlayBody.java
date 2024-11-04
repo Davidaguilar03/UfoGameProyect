@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -23,7 +25,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UfoGamePlayBody extends JPanel {
+public class UfoGamePlayBody extends JPanel implements KeyListener {
     private UfoGamePlayView ufoGamePlayView;
     private PropertiesService propertiesService;
     private JPanel playBodyPanel;
@@ -41,20 +43,18 @@ public class UfoGamePlayBody extends JPanel {
         this.showTrajectory = ufoGamePlayView.getUfoGameView().getUfoGameBody().isShowTrajectory();
         this.setLayout(null);
         this.initPlayPanel();
-        
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 selectUfo(e.getPoint());
+                playBodyPanel.requestFocusInWindow();
             }
-
+            
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (selectedUfo != null) {
                     selectedUfo.setTrajectory(new ArrayList<>(trajectoryPoints));
                     trajectoryPoints.clear();
-                    selectedUfo = null;
-                    repaint();
                 }
             }
         });
@@ -70,6 +70,25 @@ public class UfoGamePlayBody extends JPanel {
         });
     }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (selectedUfo != null) {
+            if (e.getKeyCode() == KeyEvent.VK_UP) {
+                increaseSpeed(selectedUfo);
+            } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                decreaseSpeed(selectedUfo);
+            }
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
     private void initPlayPanel() {
         playBodyPanel = new ImagePanel(propertiesService.getKeyValue("PlayBackground"), 0.85f) {
             @Override
@@ -77,11 +96,12 @@ public class UfoGamePlayBody extends JPanel {
                 super.paintComponent(g);
                 drawUfos(g);
                 if (showTrajectory) {
-                    drawTrajectory(g); 
+                    drawTrajectory(g);
                 }
             }
         };
-        
+        playBodyPanel.setFocusable(true);
+        playBodyPanel.addKeyListener(this);
         playBodyPanel.setBounds(0, 0, 1200, 686);
         playBodyPanel.setLayout(null);
         this.add(playBodyPanel);
@@ -97,9 +117,9 @@ public class UfoGamePlayBody extends JPanel {
 
     private void drawTrajectory(Graphics g) {
         if (!trajectoryPoints.isEmpty()) {
-            Graphics2D g2d = (Graphics2D) g; 
-            g2d.setColor(GlobalView.HEADER_MENU_BACKGROUND); 
-            g2d.setStroke(new BasicStroke(3)); 
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setColor(GlobalView.HEADER_MENU_BACKGROUND);
+            g2d.setStroke(new BasicStroke(3));
             for (int i = 0; i < trajectoryPoints.size() - 1; i++) {
                 Point start = trajectoryPoints.get(i);
                 Point end = trajectoryPoints.get(i + 1);
@@ -107,11 +127,10 @@ public class UfoGamePlayBody extends JPanel {
             }
         }
     }
-    
 
     private void selectUfo(Point point) {
         for (Ufo ufo : ufos) {
-            if (ufo.getBounds().contains(point)) { 
+            if (ufo.getBounds().contains(point)) {
                 selectedUfo = ufo;
                 trajectoryPoints.clear();
                 break;
@@ -121,5 +140,19 @@ public class UfoGamePlayBody extends JPanel {
 
     public void updateUFOs() {
         playBodyPanel.repaint();
+    }
+
+    private void increaseSpeed(Ufo ufo) {
+        ufo.setSpeed(Math.max(ufo.getSpeed() + 1, 2)); 
+        updateUFOs();
+    }
+
+    private void decreaseSpeed(Ufo ufo) {
+        int newSpeed = ufo.getSpeed() - 1;
+        if (newSpeed < 2) {
+            newSpeed = 2; 
+        }
+        ufo.setSpeed(newSpeed);
+        updateUFOs();
     }
 }
