@@ -16,11 +16,11 @@ public class UfoGamePlayView extends JFrame{
         this.initFrame();
         this.createUfoGamePlayBody();
         this.createUfoGamePlayHeader();
-        ufoGameView.getPresenter().startGame();
     }
-
+    
     public void begin(){
         this.setVisible(true);
+        ufoGameView.getPresenter().startGame();
     }
 
     private void initFrame(){

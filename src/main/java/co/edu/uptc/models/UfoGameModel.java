@@ -1,23 +1,29 @@
 package co.edu.uptc.models;
-import java.util.ArrayList;
+
+import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import co.edu.uptc.interfaces.UfoGameInterface;
 import co.edu.uptc.interfaces.UfoGameInterface.Presenter;
 import co.edu.uptc.pojos.Ufo;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class UfoGameModel implements UfoGameInterface.Model {
     private UfoGameInterface.Presenter presenter;
     private List<Ufo> Ufos;
+    private int spawnRate;
+    private int speed;
+    private int numberofUfos;
 
     public UfoGameModel() {
-        this.Ufos = new ArrayList<>();
+        this.Ufos = new CopyOnWriteArrayList<>();
     }
 
-    @Override
-    public void addUfo(int speed){
+    public synchronized void addUfo(int speed) {
         UfoController ufoController = new UfoController();
         Ufo newUfo = ufoController.createUfo(speed);
         Ufos.add(newUfo);
@@ -25,11 +31,12 @@ public class UfoGameModel implements UfoGameInterface.Model {
 
     @Override
     public void startGame() {
-        UfoRunner ufoRunner = new UfoRunner(this);
-        Thread thread = new Thread(ufoRunner);
-        thread.start();
+        Thread moveThread = new Thread(new UfoRunner(this));
+        moveThread.start();
+        Thread spawnThread = new Thread(new SpawnRunner(this));
+        spawnThread.start();
     }
-    
+
     @Override
     public List<Ufo> getUfos() {
         return Ufos;
@@ -37,13 +44,30 @@ public class UfoGameModel implements UfoGameInterface.Model {
 
     @Override
     public void setPresenter(Presenter presenter) {
-        this.presenter=presenter;
+        this.presenter = presenter;
     }
 
-    public void moveAll() {
-        for (Ufo Ufo : Ufos) {
+    @Override
+    public void setSpawnRate(int spawnRate) {
+        this.spawnRate = spawnRate;
+    }
+
+    @Override
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    @Override
+    public void setNumberofUfos(int numberofUfos) {
+        this.numberofUfos = numberofUfos;
+    }
+    
+    public synchronized void moveAll() {
+        Iterator<Ufo> iterator = Ufos.iterator();
+        while (iterator.hasNext()) {
+            Ufo ufo = iterator.next();
             UfoController ufoController = new UfoController();
-            ufoController.moveUfo(Ufo);
+            ufoController.moveUfo(ufo);
         }
     }
 }

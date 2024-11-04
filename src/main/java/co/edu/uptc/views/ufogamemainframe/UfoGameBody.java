@@ -41,8 +41,6 @@ public class UfoGameBody extends JPanel {
     private CardLayout cardLayout;
     private Checkbox trayectoryCheckbox;
     private UfoGamePlayView ufoGamePlayView;
-    private int numberofUfos;
-    private int speed;
     private String selectedUfoImage;
     private Map<JLabel, String> imageLabelMap = new HashMap<>();
 
@@ -53,10 +51,8 @@ public class UfoGameBody extends JPanel {
         this.initPlayPanel();
         this.initMenuPanel();
         selectedUfoImage = propertiesService.getKeyValue("UFO1-OFF");
-        numberofUfos=3;
-        speed=3;
     }
-
+    
     private void initPlayPanel() {
         playPanel = new ImagePanel(propertiesService.getKeyValue("GameLogo"), 1);
         playPanel.setForeground(GlobalView.BODY_PLAY_FOREGROUND);
@@ -64,7 +60,7 @@ public class UfoGameBody extends JPanel {
         this.add(playPanel, "Play");
         this.createPlayBtn();
     }
-
+    
     private void initMenuPanel() {
         menuPanel = new ImagePanel(propertiesService.getKeyValue("MenuBackGround"), 0.5f);
         menuPanel.setForeground(GlobalView.BODY_MENU_FOREGROUND);
@@ -80,7 +76,7 @@ public class UfoGameBody extends JPanel {
         this.createTextFileUfosSpeed();
         this.createUfoImageSelector();
     }
-
+    
     private void createPlayBtn() {
         RoundedButton playBtn = new RoundedButton("<html><div style='text-align: center;'>Jugar</html>", 20);
         playBtn.setBounds(200, 400, 100, 50);
@@ -88,19 +84,19 @@ public class UfoGameBody extends JPanel {
         playBtn.setForeground(GlobalView.BTN_FOREGROUND);
         playBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                addUfos();
+                saveSettings();
                 createUfoGamePlayView();
                 SwingUtilities.getWindowAncestor(playPanel).dispose();
             }
         });
         playPanel.add(playBtn);
     }
-
+    
     public void createUfoGamePlayView() {
-        ufoGamePlayView = new UfoGamePlayView(ufoGameView);
-        ufoGamePlayView.begin();
+        this.ufoGamePlayView = new UfoGamePlayView(ufoGameView);
+        this.ufoGamePlayView.begin();
     }
-
+    
     private void createLblSpawnRate() {
         JLabel lblSpawnRate = new JLabel("INGRESE EL RADIO DE APARICION");
         lblSpawnRate.setBounds(100, 15, 500, 25);
@@ -273,22 +269,33 @@ public class UfoGameBody extends JPanel {
         backBtn.setForeground(GlobalView.BTN_FOREGROUND);
         backBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ufoGameView.getBodyCardLayout().show(ufoGameView.getUfoGameBody(), "Play");
                 saveSettings();
+                ufoGameView.getBodyCardLayout().show(ufoGameView.getUfoGameBody(), "Play");
             }
         });
         menuPanel.add(backBtn);
     }
 
     public void saveSettings() {
-        numberofUfos = Integer.parseInt(txtUfosAmount.getText());
-        speed = Integer.parseInt(txtUfosSpeed.getText());
-        addUfos();
-    }
-
-    private void addUfos(){
-        for (int i = 0; i < numberofUfos; i++) {
-            ufoGameView.getPresenter().addUfo(speed);
+        try {
+            int ufosAmount = Integer.parseInt(txtUfosAmount.getText());
+            ufoGameView.getPresenter().setNumberofUfos(ufosAmount);
+        } catch (NumberFormatException e) {
+            ufoGameView.getPresenter().setNumberofUfos(5); 
         }
+    
+        try {
+            int ufosSpeed = Integer.parseInt(txtUfosSpeed.getText());
+            ufoGameView.getPresenter().setSpeed(ufosSpeed);
+        } catch (NumberFormatException e) {
+            ufoGameView.getPresenter().setSpeed(5); 
+        }
+    
+        try {
+            int spawnRate = Integer.parseInt(txtSpawnRate.getText());
+            ufoGameView.getPresenter().setSpawnRate(spawnRate);
+        } catch (NumberFormatException e) {
+            ufoGameView.getPresenter().setSpawnRate(1000); 
     }
+}
 }

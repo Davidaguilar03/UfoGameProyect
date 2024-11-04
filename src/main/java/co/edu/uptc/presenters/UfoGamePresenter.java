@@ -1,4 +1,5 @@
 package co.edu.uptc.presenters;
+
 import java.util.List;
 
 import co.edu.uptc.interfaces.*;
@@ -23,11 +24,6 @@ public class UfoGamePresenter implements UfoGameInterface.Presenter {
     }
 
     @Override
-    public void addUfo(int speed) {
-        model.addUfo(speed);
-    }
-
-    @Override
     public List<Ufo> getUfos() {
         return model.getUfos();
     }
@@ -42,6 +38,19 @@ public class UfoGamePresenter implements UfoGameInterface.Presenter {
         view.updateUFOs();
     }
 
+    @Override
+    public void setSpawnRate(int spawnRate) {
+        model.setSpawnRate(spawnRate);
+    }
 
+    @Override
+    public void setSpeed(int speed) {
+        model.setSpeed(speed);
+    }
+
+    @Override
+    public void setNumberofUfos(int numberofUfos) {
+        model.setNumberofUfos(numberofUfos);
+    }
 
 }

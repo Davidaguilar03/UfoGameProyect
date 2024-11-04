@@ -1,23 +1,24 @@
 package co.edu.uptc.models;
 
-public class UfoRunner implements Runnable {
+public class SpawnRunner implements Runnable {
     private UfoGameModel ufoGameModel;
 
-    public UfoRunner(UfoGameModel ufoGameModel) {
+    public SpawnRunner(UfoGameModel ufoGameModel) {
         this.ufoGameModel = ufoGameModel;
     }
 
     @Override
     public void run() {
-        while (true) {
-            ufoGameModel.moveAll(); 
+        int createdUfos = 0;
+        while (createdUfos < ufoGameModel.getNumberofUfos()) {
+            ufoGameModel.addUfo(ufoGameModel.getSpeed()); 
+            createdUfos++;
             ufoGameModel.getPresenter().updateUFOs(); 
             try {
-                Thread.sleep(50); 
+                Thread.sleep(ufoGameModel.getSpawnRate()); 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 }
-
