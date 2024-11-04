@@ -16,7 +16,6 @@ import co.edu.uptc.views.GlobalView;
 import co.edu.uptc.views.ufogameplayframe.UfoGamePlayView;
 
 import java.awt.CardLayout;
-import java.awt.Checkbox;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Image;
@@ -39,10 +38,11 @@ public class UfoGameBody extends JPanel {
     private JTextField txtUfosAmount;
     private JTextField txtUfosSpeed;
     private CardLayout cardLayout;
-    private Checkbox trayectoryCheckbox;
+    private JCheckBox trayectoryCheckbox;
     private UfoGamePlayView ufoGamePlayView;
     private String selectedUfoImage;
     private Map<JLabel, String> imageLabelMap = new HashMap<>();
+    private boolean showTrajectory;
 
     public UfoGameBody(UfoGameView ufoGameView, CardLayout cardLayout) {
         propertiesService = new PropertiesService();
@@ -51,6 +51,7 @@ public class UfoGameBody extends JPanel {
         this.initPlayPanel();
         this.initMenuPanel();
         selectedUfoImage = propertiesService.getKeyValue("UFO1-OFF");
+        showTrajectory = true;
     }
     
     private void initPlayPanel() {
@@ -194,13 +195,14 @@ public class UfoGameBody extends JPanel {
     }
 
     private void createTrayectoryCheckBox() {
-        JCheckBox trayectoryCheckbox = new JCheckBox("Mostrar la Trayectoria");
+        trayectoryCheckbox = new JCheckBox("Mostrar la Trayectoria");
         trayectoryCheckbox.setBackground(GlobalView.BODY_PLAY_BACKGROUND);
         trayectoryCheckbox.setForeground(GlobalView.SECUNDARY_BTN_TEXT_BACKGROUND);
         trayectoryCheckbox.setFont(new Font("Arial", Font.BOLD, 14));
         trayectoryCheckbox.setBorder(BorderFactory.createLineBorder(GlobalView.PLACEHOLDER_TEXT_COLOR, 1));
         trayectoryCheckbox.setBounds(100, 235, 300, 30);
         trayectoryCheckbox.setHorizontalAlignment(SwingConstants.LEFT);
+        trayectoryCheckbox.setSelected(showTrajectory);
         menuPanel.add(trayectoryCheckbox);
     }
 
@@ -297,5 +299,6 @@ public class UfoGameBody extends JPanel {
         } catch (NumberFormatException e) {
             ufoGameView.getPresenter().setSpawnRate(1000); 
     }
+      showTrajectory = trayectoryCheckbox.isSelected(); 
 }
 }
