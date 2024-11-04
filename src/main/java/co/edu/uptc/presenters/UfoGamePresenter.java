@@ -53,4 +53,14 @@ public class UfoGamePresenter implements UfoGameInterface.Presenter {
         model.setNumberofUfos(numberofUfos);
     }
 
+    @Override
+    public void incrementCrashedUfoCount() {
+        view.incrementCrashedUfoCount();
+    }
+
+    @Override
+    public void updateUfoCount(int ufoCount) {
+        view.updateUfoCount(ufoCount);
+    }
+
 }

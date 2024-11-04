@@ -1,7 +1,6 @@
 package co.edu.uptc.interfaces;
 
 import java.util.List;
-
 import co.edu.uptc.pojos.Ufo;
 
 public class UfoGameInterface {
@@ -26,6 +25,10 @@ public class UfoGameInterface {
         public void updateUFOs();
 
         public void setPresenter(Presenter presenter);
+
+        public void updateUfoCount(int ufoCount);
+
+        public void incrementCrashedUfoCount();
     }
 
     public interface Presenter {
@@ -40,6 +43,10 @@ public class UfoGameInterface {
         public void setSpeed(int speed);
         
         public void setNumberofUfos(int numberofUfos);
+
+        public void updateUfoCount(int ufoCount);
+
+        public void incrementCrashedUfoCount();
 
         public void setView(View view);
 

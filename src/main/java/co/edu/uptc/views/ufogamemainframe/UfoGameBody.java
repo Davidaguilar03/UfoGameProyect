@@ -202,7 +202,6 @@ public class UfoGameBody extends JPanel {
         trayectoryCheckbox.setBorder(BorderFactory.createLineBorder(GlobalView.PLACEHOLDER_TEXT_COLOR, 1));
         trayectoryCheckbox.setBounds(100, 235, 300, 30);
         trayectoryCheckbox.setHorizontalAlignment(SwingConstants.LEFT);
-        trayectoryCheckbox.setSelected(showTrajectory);
         menuPanel.add(trayectoryCheckbox);
     }
 

@@ -46,8 +46,8 @@ public class UfoGamePlayHeader extends JPanel{
     public void updateCounters() {
         pointsCounter.setText("OVNIs en Movimiento: " + ufoCount + " | OVNIs Estrellados: " + crashedUfoCount);
     }
-    public void incrementUfoCount() {
-        ufoCount++;
+    public void updateUfoCount(int ufoCount) {
+        this.ufoCount = ufoCount;  
         updateCounters();
     }
     public void incrementCrashedUfoCount() {

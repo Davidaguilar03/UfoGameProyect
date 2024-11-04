@@ -3,12 +3,15 @@ package co.edu.uptc.models;
 import co.edu.uptc.pojos.Ufo;
 
 import java.awt.Point;
+import java.util.List;
 import java.util.Random;
 
 public class UfoController {
     private Random random;
+    private UfoGameModel ufoGameModel;
 
-    public UfoController() {
+    public UfoController(UfoGameModel ufoGameModel) {
+        this.ufoGameModel = ufoGameModel;
         this.random = new Random();
     }
 
@@ -30,15 +33,36 @@ public class UfoController {
         return random.nextDouble() * 2 * Math.PI;
     }
 
-    public void moveUfo(Ufo ufo) {
+    public void moveUfo(Ufo ufo, List<Ufo> allUfos) {
         if (ufo.isMoving() && ufo.getTrajectory() != null && !ufo.getTrajectory().isEmpty()) {
             followTrajectory(ufo);
         } else if (ufo.isMoving()) {
-            int deltaX = (int) (ufo.getSpeed() * Math.cos(ufo.getLastAngle()));
-            int deltaY = (int) (ufo.getSpeed() * Math.sin(ufo.getLastAngle()));
+            int deltaX = (int) (ufo.getSpeed() * Math.cos(ufo.getLastAngle())); 
+            int deltaY = (int) (ufo.getSpeed() * Math.sin(ufo.getLastAngle())); 
             ufo.getPosition().translate(deltaX, deltaY);
-            checkCollision(ufo);
+            if (checkWallCollision(ufo)) {
+                removeUfo(ufo, allUfos);
+                return; 
+            }
+            for (Ufo otherUfo : allUfos) {
+                if (ufo != otherUfo && ufo.getBounds().intersects(otherUfo.getBounds())) {
+                    removeUfo(ufo, allUfos);
+                    removeUfo(otherUfo, allUfos);
+                    return; 
+                }
+            }
         }
+    }
+    
+
+    private boolean checkWallCollision(Ufo ufo) {
+        return ufo.getPosition().x < 0 || ufo.getPosition().x > 1125 || 
+               ufo.getPosition().y < 0 || ufo.getPosition().y > 632;
+    }
+    
+    private void removeUfo(Ufo ufo, List<Ufo> allUfos) {
+        allUfos.remove(ufo);
+        ufoGameModel.getPresenter().incrementCrashedUfoCount();
     }
 
     private void followTrajectory(Ufo ufo) {
@@ -57,12 +81,5 @@ public class UfoController {
             currentPos.setLocation(targetPos);
             ufo.removeReachedPoint();
         }
-    }
-
-    private void checkCollision(Ufo ufo) {
-        if (ufo.getPosition().x < 0 || ufo.getPosition().x > 1125 || ufo.getPosition().y < 0
-                || ufo.getPosition().y > 632) {
-            ufo.setMoving(false);
-        }
-    }
+    }   
 }

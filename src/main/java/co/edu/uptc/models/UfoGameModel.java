@@ -14,6 +14,8 @@ import lombok.Setter;
 @Setter
 public class UfoGameModel implements UfoGameInterface.Model {
     private UfoGameInterface.Presenter presenter;
+    private UfoRunner ufoRunner;
+    private SpawnRunner spawnRunner;
     private List<Ufo> Ufos;
     private int spawnRate;
     private int speed;
@@ -21,19 +23,21 @@ public class UfoGameModel implements UfoGameInterface.Model {
 
     public UfoGameModel() {
         this.Ufos = new CopyOnWriteArrayList<>();
+        ufoRunner = new UfoRunner(this);
+        spawnRunner = new SpawnRunner(this);
     }
 
     public synchronized void addUfo(int speed) {
-        UfoController ufoController = new UfoController();
+        UfoController ufoController = new UfoController(this);
         Ufo newUfo = ufoController.createUfo(speed);
         Ufos.add(newUfo);
     }
 
     @Override
     public void startGame() {
-        Thread moveThread = new Thread(new UfoRunner(this));
+        Thread moveThread = new Thread(ufoRunner);
         moveThread.start();
-        Thread spawnThread = new Thread(new SpawnRunner(this));
+        Thread spawnThread = new Thread(spawnRunner);
         spawnThread.start();
     }
 
@@ -66,8 +70,9 @@ public class UfoGameModel implements UfoGameInterface.Model {
         Iterator<Ufo> iterator = Ufos.iterator();
         while (iterator.hasNext()) {
             Ufo ufo = iterator.next();
-            UfoController ufoController = new UfoController();
-            ufoController.moveUfo(ufo);
+            UfoController ufoController = new UfoController(this);
+            ufoController.moveUfo(ufo,Ufos);
+            presenter.updateUfoCount(Ufos.size());
         }
     }
 }
