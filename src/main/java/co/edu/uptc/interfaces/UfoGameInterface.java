@@ -28,7 +28,9 @@ public class UfoGameInterface {
 
         public void updateUfoCount(int ufoCount);
 
-        public void incrementCrashedUfoCount();
+        public void incrementCrashedUfoCount(int increment);
+
+        public void incrementLandedUfoCount();
     }
 
     public interface Presenter {
@@ -46,7 +48,9 @@ public class UfoGameInterface {
 
         public void updateUfoCount(int ufoCount);
 
-        public void incrementCrashedUfoCount();
+        public void incrementCrashedUfoCount(int increment);
+        
+        public void incrementLandedUfoCount();
 
         public void setView(View view);
 

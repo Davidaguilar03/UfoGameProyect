@@ -289,7 +289,7 @@ public class UfoGameBody extends JPanel {
             int ufosSpeed = Integer.parseInt(txtUfosSpeed.getText());
             ufoGameView.getPresenter().setSpeed(ufosSpeed);
         } catch (NumberFormatException e) {
-            ufoGameView.getPresenter().setSpeed(5); 
+            ufoGameView.getPresenter().setSpeed(3); 
         }
     
         try {

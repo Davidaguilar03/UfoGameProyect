@@ -55,13 +55,18 @@ public class UfoGamePresenter implements UfoGameInterface.Presenter {
 
 
     @Override
-    public void incrementCrashedUfoCount() {
-        view.incrementCrashedUfoCount();
+    public void incrementCrashedUfoCount(int increment) {
+        view.incrementCrashedUfoCount(increment);
     }
 
     @Override
     public void updateUfoCount(int ufoCount) {
         view.updateUfoCount(ufoCount);
+    }
+
+    @Override
+    public void incrementLandedUfoCount() {
+        view.incrementLandedUfoCount();
     }
 
 }

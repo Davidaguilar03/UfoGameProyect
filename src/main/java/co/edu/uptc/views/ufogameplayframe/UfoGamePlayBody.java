@@ -34,6 +34,8 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
     private boolean showTrajectory;
     private Ufo selectedUfo;
     private ArrayList<Point> trajectoryPoints = new ArrayList<>();
+    private Image landingStripImage;
+    private Image scaledLandingStripImage;
 
     public UfoGamePlayBody(UfoGamePlayView ufoGamePlayView) {
         this.propertiesService = new PropertiesService();
@@ -43,13 +45,14 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
         this.showTrajectory = ufoGamePlayView.getUfoGameView().getUfoGameBody().isShowTrajectory();
         this.setLayout(null);
         this.initPlayPanel();
+        loadLandingStripImage();
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 selectUfo(e.getPoint());
                 playBodyPanel.requestFocusInWindow();
             }
-            
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (selectedUfo != null) {
@@ -89,11 +92,22 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
     public void keyReleased(KeyEvent e) {
     }
 
+    private void loadLandingStripImage() {
+        try {
+            landingStripImage = new ImageIcon(propertiesService.getKeyValue("UfoLanding")).getImage();
+            scaledLandingStripImage = landingStripImage.getScaledInstance(80, 60, Image.SCALE_SMOOTH);
+        } catch (Exception e) {
+            landingStripImage = null;
+            scaledLandingStripImage = null;
+        }
+    }
+
     private void initPlayPanel() {
         playBodyPanel = new ImagePanel(propertiesService.getKeyValue("PlayBackground"), 0.85f) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
+                drawLandingStrip(g);
                 drawUfos(g);
                 if (showTrajectory) {
                     drawTrajectory(g);
@@ -105,6 +119,12 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
         playBodyPanel.setBounds(0, 0, 1200, 686);
         playBodyPanel.setLayout(null);
         this.add(playBodyPanel);
+    }
+
+    private void drawLandingStrip(Graphics g) {
+        if (scaledLandingStripImage != null) {
+            g.drawImage(scaledLandingStripImage, 580, 145, this);
+        } 
     }
 
     private void drawUfos(Graphics g) {
