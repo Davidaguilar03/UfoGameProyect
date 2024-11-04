@@ -10,10 +10,10 @@ import java.util.Random;
 public class UfoController {
     private Random random;
     private UfoGameModel ufoGameModel;
-    private static final int LANDING_STRIP_X = 560;
-    private static final int LANDING_STRIP_Y = 130;
-    private static final int LANDING_STRIP_WIDTH = 120;
-    private static final int LANDING_STRIP_HEIGHT = 100;
+    private static final int LANDING_STRIP_X = 580;
+    private static final int LANDING_STRIP_Y = 145;
+    private static final int LANDING_STRIP_WIDTH = 80;
+    private static final int LANDING_STRIP_HEIGHT = 60;
 
     public UfoController(UfoGameModel ufoGameModel) {
         this.ufoGameModel = ufoGameModel;
@@ -47,11 +47,13 @@ public class UfoController {
             ufo.getPosition().translate(deltaX, deltaY);
             if (checkWallCollision(ufo)) {
                 removeUfo(ufo, allUfos);
+                ufoGameModel.getPresenter().playCrashSound();
                 ufoGameModel.getPresenter().incrementCrashedUfoCount(1);
                 return;
             }
             if (checkLandingStripCollision(ufo)) {
                 removeUfo(ufo, allUfos);
+                ufoGameModel.getPresenter().playLandingSound();
                 ufoGameModel.getPresenter().incrementLandedUfoCount();
                 return;
             }
@@ -59,6 +61,7 @@ public class UfoController {
                 if (ufo != otherUfo && ufo.getBounds().intersects(otherUfo.getBounds())) {
                     removeUfo(ufo, allUfos);
                     removeUfo(otherUfo, allUfos);
+                    ufoGameModel.getPresenter().playCrashSound();
                     ufoGameModel.getPresenter().incrementCrashedUfoCount(2);
                     return;
                 }
@@ -68,18 +71,16 @@ public class UfoController {
 
     private boolean checkWallCollision(Ufo ufo) {
         return ufo.getPosition().x < 0 || ufo.getPosition().x > 1125 ||
-                ufo.getPosition().y < 0 || ufo.getPosition().y > 632;
+               ufo.getPosition().y < 0 || ufo.getPosition().y > 632;
     }
 
     private boolean checkLandingStripCollision(Ufo ufo) {
-        Rectangle landingStrip = new Rectangle(LANDING_STRIP_X, LANDING_STRIP_Y, LANDING_STRIP_WIDTH,
-                LANDING_STRIP_HEIGHT);
+        Rectangle landingStrip = new Rectangle(LANDING_STRIP_X, LANDING_STRIP_Y, LANDING_STRIP_WIDTH, LANDING_STRIP_HEIGHT);
         return landingStrip.contains(ufo.getPosition());
     }
 
     private void removeUfo(Ufo ufo, List<Ufo> allUfos) {
         allUfos.remove(ufo);
-
     }
 
     private void followTrajectory(Ufo ufo) {

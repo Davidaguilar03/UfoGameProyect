@@ -69,4 +69,14 @@ public class UfoGamePresenter implements UfoGameInterface.Presenter {
         view.incrementLandedUfoCount();
     }
 
+    @Override
+    public void playCrashSound() {
+        view.playCrashSound();
+    }
+
+    @Override
+    public void playLandingSound() {
+        view.playLandingSound();
+    }
+
 }

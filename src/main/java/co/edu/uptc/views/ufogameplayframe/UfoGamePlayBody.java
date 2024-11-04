@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import co.edu.uptc.pojos.Ufo;
+import co.edu.uptc.utilities.AudioPlayer;
 import co.edu.uptc.utilities.ImagePanel;
 import co.edu.uptc.utilities.PropertiesService;
 import co.edu.uptc.views.GlobalView;
@@ -37,6 +38,9 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
     private ArrayList<Point> trajectoryPoints = new ArrayList<>();
     private Image landingStripImage;
     private Image scaledLandingStripImage;
+    private AudioPlayer backgroundMusicPlayer;
+    private AudioPlayer crashSoundPlayer;
+    private AudioPlayer landingSoundPlayer;
 
     public UfoGamePlayBody(UfoGamePlayView ufoGamePlayView) {
         this.propertiesService = new PropertiesService();
@@ -48,6 +52,8 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
         this.setLayout(null);
         this.initPlayPanel();
         loadLandingStripImage();
+        initAudioPlayers();
+        playBackgroundMusic();
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -73,6 +79,24 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
                 }
             }
         });
+    }
+
+    private void initAudioPlayers() {
+        backgroundMusicPlayer = new AudioPlayer();
+        crashSoundPlayer = new AudioPlayer();
+        landingSoundPlayer = new AudioPlayer();
+    }
+
+    private void playBackgroundMusic() {
+        backgroundMusicPlayer.playSound(propertiesService.getKeyValue("GameSound"), true);
+    }
+
+    public void playCrashSound() {
+        crashSoundPlayer.playSound(propertiesService.getKeyValue("UfoCrashSound"), false);
+    }
+
+    public void playLandingSound() {
+        landingSoundPlayer.playSound(propertiesService.getKeyValue("UfoLandingSound"), false);
     }
 
     @Override

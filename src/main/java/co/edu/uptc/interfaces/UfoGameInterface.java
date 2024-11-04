@@ -31,6 +31,10 @@ public class UfoGameInterface {
         public void incrementCrashedUfoCount(int increment);
 
         public void incrementLandedUfoCount();
+
+        public void playCrashSound();
+
+        public void playLandingSound();
     }
 
     public interface Presenter {
@@ -55,5 +59,9 @@ public class UfoGameInterface {
         public void setView(View view);
 
         public void setModel(Model model);
+
+        public void playCrashSound();
+
+        public void playLandingSound();
     }
 }
