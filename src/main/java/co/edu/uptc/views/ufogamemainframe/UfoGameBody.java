@@ -296,7 +296,7 @@ public class UfoGameBody extends JPanel {
             int spawnRate = Integer.parseInt(txtSpawnRate.getText());
             ufoGameView.getPresenter().setSpawnRate(spawnRate);
         } catch (NumberFormatException e) {
-            ufoGameView.getPresenter().setSpawnRate(1000); 
+            ufoGameView.getPresenter().setSpawnRate(100); 
     }
       showTrajectory = trayectoryCheckbox.isSelected(); 
 }

@@ -31,6 +31,7 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
     private JPanel playBodyPanel;
     private List<Ufo> ufos;
     private String ufoImage;
+    private String ufoImageOn; 
     private boolean showTrajectory;
     private Ufo selectedUfo;
     private ArrayList<Point> trajectoryPoints = new ArrayList<>();
@@ -42,6 +43,7 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
         this.ufoGamePlayView = ufoGamePlayView;
         this.ufos = ufoGamePlayView.getUfoGameView().getPresenter().getUfos();
         this.ufoImage = ufoGamePlayView.getUfoGameView().getUfoGameBody().getSelectedUfoImage();
+        this.ufoImageOn = ufoImage.replace("-OFF", "-ON"); 
         this.showTrajectory = ufoGamePlayView.getUfoGameView().getUfoGameBody().isShowTrajectory();
         this.setLayout(null);
         this.initPlayPanel();
@@ -128,9 +130,10 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
     }
 
     private void drawUfos(Graphics g) {
-        ImageIcon ufoIcon = new ImageIcon(ufoImage);
-        Image ufoImage = ufoIcon.getImage();
         for (Ufo ufo : ufos) {
+            String imagePath = (ufo == selectedUfo) ? ufoImageOn : ufoImage;
+            ImageIcon ufoIcon = new ImageIcon(imagePath);
+            Image ufoImage = ufoIcon.getImage();
             g.drawImage(ufoImage, ufo.getPosition().x, ufo.getPosition().y, 75, 54, this);
         }
     }
@@ -156,6 +159,7 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
                 break;
             }
         }
+        updateUFOs(); 
     }
 
     public void updateUFOs() {
