@@ -35,7 +35,7 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
     private String ufoImageOn; 
     private boolean showTrajectory;
     private Ufo selectedUfo;
-    private ArrayList<Point> trajectoryPoints = new ArrayList<>();
+    private ArrayList<Point> trajectoryPoints;
     private Image landingStripImage;
     private Image scaledLandingStripImage;
     private AudioPlayer backgroundMusicPlayer;
@@ -45,15 +45,24 @@ public class UfoGamePlayBody extends JPanel implements KeyListener {
     public UfoGamePlayBody(UfoGamePlayView ufoGamePlayView) {
         this.propertiesService = new PropertiesService();
         this.ufoGamePlayView = ufoGamePlayView;
+        this.trajectoryPoints = new ArrayList<>();
         this.ufos = ufoGamePlayView.getUfoGameView().getPresenter().getUfos();
         this.ufoImage = ufoGamePlayView.getUfoGameView().getUfoGameBody().getSelectedUfoImage();
-        this.ufoImageOn = ufoImage.replace("-OFF", "-ON"); 
+        this.ufoImageOn = ufoImage.replace("-OFF", "-ON");
         this.showTrajectory = ufoGamePlayView.getUfoGameView().getUfoGameBody().isShowTrajectory();
         this.setLayout(null);
-        this.initPlayPanel();
+        initComponents();
+        addMouseListeners();
+    }
+
+    private void initComponents() {
+        initPlayPanel();
         loadLandingStripImage();
         initAudioPlayers();
         playBackgroundMusic();
+    }
+
+    private void addMouseListeners() {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
