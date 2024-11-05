@@ -195,7 +195,7 @@ public class UfoGameBody extends JPanel {
     }
 
     private void createTrayectoryCheckBox() {
-        trayectoryCheckbox = new JCheckBox("Mostrar la Trayectoria", true); // Marcar por defecto
+        trayectoryCheckbox = new JCheckBox("Mostrar la Trayectoria", true);
         trayectoryCheckbox.setBackground(GlobalView.BODY_PLAY_BACKGROUND);
         trayectoryCheckbox.setForeground(GlobalView.SECUNDARY_BTN_TEXT_BACKGROUND);
         trayectoryCheckbox.setFont(new Font("Arial", Font.BOLD, 14));
