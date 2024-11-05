@@ -41,44 +41,61 @@ public class UfoController {
         if (ufo.isMoving() && ufo.getTrajectory() != null && !ufo.getTrajectory().isEmpty()) {
             followTrajectory(ufo);
         } else if (ufo.isMoving()) {
-            int deltaX = (int) (ufo.getSpeed() * Math.cos(ufo.getLastAngle()));
-            int deltaY = (int) (ufo.getSpeed() * Math.sin(ufo.getLastAngle()));
-            ufo.getPosition().translate(deltaX, deltaY);
-            if (checkWallCollision(ufo)) {
+            moveInLastDirection(ufo);
+            handleCollisions(ufo, allUfos);
+        }
+    }
+
+    private void moveInLastDirection(Ufo ufo) {
+        int deltaX = (int) (ufo.getSpeed() * Math.cos(ufo.getLastAngle()));
+        int deltaY = (int) (ufo.getSpeed() * Math.sin(ufo.getLastAngle()));
+        ufo.getPosition().translate(deltaX, deltaY);
+    }
+
+    private void handleCollisions(Ufo ufo, List<Ufo> allUfos) {
+        if (checkWallCollision(ufo)) {
+            handleWallCollision(ufo, allUfos);
+        } else if (checkLandingStripCollision(ufo)) {
+            handleLandingStripCollision(ufo, allUfos);
+        } else {
+            handleUfoCollisions(ufo, allUfos);
+        }
+    }
+
+    private void handleWallCollision(Ufo ufo, List<Ufo> allUfos) {
+        removeUfo(ufo, allUfos);
+        ufoGameModel.getPresenter().playCrashSound();
+        ufoGameModel.getPresenter().incrementCrashedUfoCount(1);
+    }
+
+    private void handleLandingStripCollision(Ufo ufo, List<Ufo> allUfos) {
+        removeUfo(ufo, allUfos);
+        ufoGameModel.getPresenter().playLandingSound();
+        ufoGameModel.getPresenter().incrementLandedUfoCount();
+    }
+
+    private void handleUfoCollisions(Ufo ufo, List<Ufo> allUfos) {
+        for (Ufo otherUfo : allUfos) {
+            if (ufo != otherUfo && ufo.getBounds().intersects(otherUfo.getBounds())) {
                 removeUfo(ufo, allUfos);
+                removeUfo(otherUfo, allUfos);
                 ufoGameModel.getPresenter().playCrashSound();
-                ufoGameModel.getPresenter().incrementCrashedUfoCount(1);
+                ufoGameModel.getPresenter().incrementCrashedUfoCount(2);
                 return;
-            }
-            if (checkLandingStripCollision(ufo)) {
-                removeUfo(ufo, allUfos);
-                ufoGameModel.getPresenter().playLandingSound();
-                ufoGameModel.getPresenter().incrementLandedUfoCount();
-                return;
-            }
-            for (Ufo otherUfo : allUfos) {
-                if (ufo != otherUfo && ufo.getBounds().intersects(otherUfo.getBounds())) {
-                    removeUfo(ufo, allUfos);
-                    removeUfo(otherUfo, allUfos);
-                    ufoGameModel.getPresenter().playCrashSound();
-                    ufoGameModel.getPresenter().incrementCrashedUfoCount(2);
-                    return;
-                }
             }
         }
     }
 
     private boolean checkWallCollision(Ufo ufo) {
         return ufo.getPosition().x < 0 || ufo.getPosition().x > 1125 ||
-               ufo.getPosition().y < 0 || ufo.getPosition().y > 632;
+                ufo.getPosition().y < 0 || ufo.getPosition().y > 632;
     }
 
     private boolean checkLandingStripCollision(Ufo ufo) {
         Point position = ufo.getPosition();
         return position.x >= LANDING_STRIP_X_MIN && position.x <= LANDING_STRIP_X_MAX &&
-               position.y >= LANDING_STRIP_Y_MIN && position.y <= LANDING_STRIP_Y_MAX;
+                position.y >= LANDING_STRIP_Y_MIN && position.y <= LANDING_STRIP_Y_MAX;
     }
-    
 
     private void removeUfo(Ufo ufo, List<Ufo> allUfos) {
         allUfos.remove(ufo);
@@ -89,30 +106,36 @@ public class UfoController {
         double speed = Math.max(ufo.getSpeed(), 2);
 
         if (!ufo.getTrajectory().isEmpty()) {
-            Point targetPos = ufo.getNextPoint();
-            int deltaX = targetPos.x - currentPos.x;
-            int deltaY = targetPos.y - currentPos.y;
-            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-            if (distance > 0) {
-                double angle = Math.atan2(deltaY, deltaX);
-                ufo.updateAngle(angle);
-                double normalizedSpeed = Math.min(speed, distance);
-                int moveX = (int) (normalizedSpeed * Math.cos(angle));
-                int moveY = (int) (normalizedSpeed * Math.sin(angle));
-                currentPos.translate(moveX, moveY);
-
-                if (distance <= speed) {
-                    currentPos.setLocation(targetPos);
-                    ufo.removeReachedPoint();
-                }
-            }
+            moveToNextPoint(ufo, currentPos, speed);
         } else {
-            double angle = ufo.getLastAngle();
-            int moveX = (int) (speed * Math.cos(angle));
-            int moveY = (int) (speed * Math.sin(angle));
-            currentPos.translate(moveX, moveY);
+            moveInLastDirection(ufo, currentPos, speed);
         }
+    }
+
+    private void moveToNextPoint(Ufo ufo, Point currentPos, double speed) {
+        Point targetPos = ufo.getNextPoint();
+        int deltaX = targetPos.x - currentPos.x;
+        int deltaY = targetPos.y - currentPos.y;
+        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        if (distance > 0) {
+            double angle = Math.atan2(deltaY, deltaX);
+            ufo.updateAngle(angle);
+            double normalizedSpeed = Math.min(speed, distance);
+            int moveX = (int) (normalizedSpeed * Math.cos(angle));
+            int moveY = (int) (normalizedSpeed * Math.sin(angle));
+            currentPos.translate(moveX, moveY);
+            if (distance <= speed) {
+                currentPos.setLocation(targetPos);
+                ufo.removeReachedPoint();
+            }
+        }
+    }
+
+    private void moveInLastDirection(Ufo ufo, Point currentPos, double speed) {
+        double angle = ufo.getLastAngle();
+        int moveX = (int) (speed * Math.cos(angle));
+        int moveY = (int) (speed * Math.sin(angle));
+        currentPos.translate(moveX, moveY);
     }
 
 }

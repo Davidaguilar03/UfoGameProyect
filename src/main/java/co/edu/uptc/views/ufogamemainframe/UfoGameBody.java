@@ -68,14 +68,12 @@ public class UfoGameBody extends JPanel {
         menuPanel.setLayout(null);
         this.add(menuPanel, "Menu");
         this.createLblSpawnRate();
-        this.createTextFileSpawnRate();
         this.createLblUfosAmount();
-        this.createTextFileUfosAmount();
         this.createTrayectoryCheckBox();
-        this.createBackBtn();
+        this.createBackButton(menuPanel);
         this.createLblUfosSpeed();
-        this.createTextFileUfosSpeed();
-        this.createUfoImageSelector();
+        this.createUfoImageSelector(menuPanel);
+        this.createAndAddTextFields(menuPanel);
     }
     
     private void createPlayBtn() {
@@ -106,30 +104,6 @@ public class UfoGameBody extends JPanel {
         menuPanel.add(lblSpawnRate);
     }
 
-    private void createTextFileSpawnRate() {
-        txtSpawnRate = new JTextField("Ingrese el Radio de Aparicion en Milisengundos");
-        txtSpawnRate.setBounds(100, 45, 300, 30);
-        txtSpawnRate.setForeground(GlobalView.PLACEHOLDER_TEXT_COLOR);
-        txtSpawnRate.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (txtSpawnRate.getText().equals("Ingrese el Radio de Aparicion en Milisengundos")) {
-                    txtSpawnRate.setText("");
-                    txtSpawnRate.setForeground(GlobalView.TEXT_COLOR);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (txtSpawnRate.getText().isEmpty()) {
-                    txtSpawnRate.setForeground(GlobalView.PLACEHOLDER_TEXT_COLOR);
-                    txtSpawnRate.setText("Ingrese el Radio de Aparicion en Milisengundos");
-                }
-            }
-        });
-        menuPanel.add(txtSpawnRate);
-    }
-
     private void createLblUfosAmount() {
         JLabel lblUfosAmount = new JLabel("INGRESE LA CANTIDAD DE OVNIS");
         lblUfosAmount.setBounds(100, 85, 500, 25);
@@ -138,60 +112,12 @@ public class UfoGameBody extends JPanel {
         menuPanel.add(lblUfosAmount);
     }
 
-    private void createTextFileUfosAmount() {
-        txtUfosAmount = new JTextField("Ingrese la Cantidad de Ovnis");
-        txtUfosAmount.setBounds(100, 115, 300, 30);
-        txtUfosAmount.setForeground(GlobalView.PLACEHOLDER_TEXT_COLOR);
-        txtUfosAmount.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (txtUfosAmount.getText().equals("Ingrese la Cantidad de Ovnis")) {
-                    txtUfosAmount.setText("");
-                    txtUfosAmount.setForeground(GlobalView.TEXT_COLOR);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (txtUfosAmount.getText().isEmpty()) {
-                    txtUfosAmount.setForeground(GlobalView.PLACEHOLDER_TEXT_COLOR);
-                    txtUfosAmount.setText("Ingrese la Cantidad de Ovnis");
-                }
-            }
-        });
-        menuPanel.add(txtUfosAmount);
-    }
-
     private void createLblUfosSpeed() {
         JLabel lblUfosSpeed = new JLabel("INGRESE LA VELOCIDAD DE OVNIS");
         lblUfosSpeed.setBounds(100, 155, 500, 25);
         lblUfosSpeed.setFont(new Font("Semi_Bold", 1, 17));
         lblUfosSpeed.setForeground(GlobalView.BODY_PLAY_BACKGROUND);
         menuPanel.add(lblUfosSpeed);
-    }
-
-    private void createTextFileUfosSpeed() {
-        txtUfosSpeed = new JTextField("Ingrese la Velocidad de Ovnis");
-        txtUfosSpeed.setBounds(100, 185, 300, 30);
-        txtUfosSpeed.setForeground(GlobalView.PLACEHOLDER_TEXT_COLOR);
-        txtUfosSpeed.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                if (txtUfosSpeed.getText().equals("Ingrese la Velocidad de Ovnis")) {
-                    txtUfosSpeed.setText("");
-                    txtUfosSpeed.setForeground(GlobalView.TEXT_COLOR);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (txtUfosSpeed.getText().isEmpty()) {
-                    txtUfosSpeed.setForeground(GlobalView.PLACEHOLDER_TEXT_COLOR);
-                    txtUfosSpeed.setText("Ingrese la Velocidad de Ovnis");
-                }
-            }
-        });
-        menuPanel.add(txtUfosSpeed);
     }
 
     private void createTrayectoryCheckBox() {
@@ -205,18 +131,34 @@ public class UfoGameBody extends JPanel {
         menuPanel.add(trayectoryCheckbox);
     }
 
-    private void createUfoImageSelector() {
+    private void createUfoImageSelector(JPanel menuPanel) {
+        JPanel ufoImageSelector = createImagePanel();
+        String[] imagePaths = getImagePaths();
+        selectedUfoImage = imagePaths[0];
+        addImagesToSelector(ufoImageSelector, imagePaths);
+        JPanel buttonPanel = createButtonPanel(ufoImageSelector);
+        menuPanel.add(buttonPanel);
+        menuPanel.add(ufoImageSelector);
+    }
+
+    private JPanel createImagePanel() {
         JPanel ufoImageSelector = new ImagePanel(propertiesService.getKeyValue("PlayBackground"), 0.7f);
         ufoImageSelector.setForeground(GlobalView.BODY_MENU_FOREGROUND);
         ufoImageSelector.setBounds(100, 275, 300, 110);
         cardLayout = new CardLayout();
         ufoImageSelector.setLayout(cardLayout);
-        String[] imagePaths = {
+        return ufoImageSelector;
+    }
+
+    private String[] getImagePaths() {
+        return new String[]{
             propertiesService.getKeyValue("UFO1-OFF"),
             propertiesService.getKeyValue("UFO2-OFF"),
-            propertiesService.getKeyValue("UFO3-OFF"),
+            propertiesService.getKeyValue("UFO3-OFF")
         };
-        selectedUfoImage = imagePaths[0]; 
+    }
+
+    private void addImagesToSelector(JPanel ufoImageSelector, String[] imagePaths) {
         for (String imagePath : imagePaths) {
             ImageIcon imageIcon = new ImageIcon(imagePath);
             Image scaledImage = imageIcon.getImage().getScaledInstance(125, 90, Image.SCALE_SMOOTH);
@@ -224,33 +166,42 @@ public class UfoGameBody extends JPanel {
             ufoImageSelector.add(label, imagePath);
             imageLabelMap.put(label, imagePath);
         }
-        RoundedButton prevButton = new RoundedButton("Anterior",20);
-        prevButton.setBackground(GlobalView.BTN_BACKGROUND);
-        prevButton.setForeground(GlobalView.BTN_FOREGROUND);
-        RoundedButton nextButton = new RoundedButton("Siguiente",20);
-        nextButton.setBackground(GlobalView.BTN_BACKGROUND);
-        nextButton.setForeground(GlobalView.BTN_FOREGROUND);
+    }
+
+    private JPanel createButtonPanel(JPanel ufoImageSelector) {
+        RoundedButton prevButton = createButton("Anterior");
+        RoundedButton nextButton = createButton("Siguiente");
+        addActionListenersToButtons(prevButton, nextButton, ufoImageSelector);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(prevButton);
+        buttonPanel.add(nextButton);
+        buttonPanel.setBounds(150, 390, 185, 35);
+        buttonPanel.setOpaque(false);
+        return buttonPanel;
+    }
+
+    private RoundedButton createButton(String text) {
+        RoundedButton button = new RoundedButton(text, 20);
+        button.setBackground(GlobalView.BTN_BACKGROUND);
+        button.setForeground(GlobalView.BTN_FOREGROUND);
+        return button;
+    }
+
+    private void addActionListenersToButtons(RoundedButton prevButton, RoundedButton nextButton, JPanel ufoImageSelector) {
         prevButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.previous(ufoImageSelector);
-                updateSelectedImage(ufoImageSelector); 
+                updateSelectedImage(ufoImageSelector);
             }
         });
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.next(ufoImageSelector);
-                updateSelectedImage(ufoImageSelector); 
+                updateSelectedImage(ufoImageSelector);
             }
         });
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(prevButton);
-        buttonPanel.add(nextButton);
-        buttonPanel.setBounds(150, 390, 185, 35);
-        buttonPanel.setOpaque(false);
-        menuPanel.add(buttonPanel);
-        menuPanel.add(ufoImageSelector);
     }
 
     private void updateSelectedImage(JPanel ufoImageSelector) {
@@ -263,41 +214,96 @@ public class UfoGameBody extends JPanel {
     }
     
     
-    private void createBackBtn() {
+    private void createBackButton(JPanel menuPanel) {
         RoundedButton backBtn = new RoundedButton("<html><div style='text-align: center;'>Volver</html>", 20);
+        configureBackButton(backBtn);
+        menuPanel.add(backBtn);
+    }
+
+    private void configureBackButton(RoundedButton backBtn) {
         backBtn.setBounds(100, 430, 305, 30);
         backBtn.setBackground(GlobalView.BTN_BACKGROUND);
         backBtn.setForeground(GlobalView.BTN_FOREGROUND);
-        backBtn.addActionListener(new ActionListener() {
+        backBtn.addActionListener(createBackButtonListener());
+    }
+
+    private ActionListener createBackButtonListener() {
+        return new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 saveSettings();
                 ufoGameView.getBodyCardLayout().show(ufoGameView.getUfoGameBody(), "Play");
             }
-        });
-        menuPanel.add(backBtn);
+        };
     }
 
-    public void saveSettings() {
+    private void saveSettings() {
+        saveUfosAmount();
+        saveUfosSpeed();
+        saveSpawnRate();
+        showTrajectory = trayectoryCheckbox.isSelected();
+    }
+
+    private void saveUfosAmount() {
         try {
             int ufosAmount = Integer.parseInt(txtUfosAmount.getText());
             ufoGameView.getPresenter().setNumberofUfos(ufosAmount);
         } catch (NumberFormatException e) {
-            ufoGameView.getPresenter().setNumberofUfos(5); 
+            ufoGameView.getPresenter().setNumberofUfos(5);
         }
-    
+    }
+
+    private void saveUfosSpeed() {
         try {
             int ufosSpeed = Integer.parseInt(txtUfosSpeed.getText());
             ufoGameView.getPresenter().setSpeed(ufosSpeed);
         } catch (NumberFormatException e) {
-            ufoGameView.getPresenter().setSpeed(2); 
+            ufoGameView.getPresenter().setSpeed(2);
         }
-    
+    }
+
+    private void saveSpawnRate() {
         try {
             int spawnRate = Integer.parseInt(txtSpawnRate.getText());
             ufoGameView.getPresenter().setSpawnRate(spawnRate);
         } catch (NumberFormatException e) {
-            ufoGameView.getPresenter().setSpawnRate(1000); 
+            ufoGameView.getPresenter().setSpawnRate(1000);
+        }
     }
-      showTrajectory = trayectoryCheckbox.isSelected(); 
+
+private void createAndAddTextFields(JPanel menuPanel) {
+    txtSpawnRate = createTextField("Ingrese el Radio de Aparicion en Milisengundos", 100, 45, 300, 30);
+    txtUfosAmount = createTextField("Ingrese la Cantidad de Ovnis", 100, 115, 300, 30);
+    txtUfosSpeed = createTextField("Ingrese la Velocidad de Ovnis", 100, 185, 300, 30);
+    menuPanel.add(txtSpawnRate);
+    menuPanel.add(txtUfosAmount);
+    menuPanel.add(txtUfosSpeed);
+}
+
+private JTextField createTextField(String placeholder, int x, int y, int width, int height) {
+    JTextField textField = new JTextField(placeholder);
+    textField.setBounds(x, y, width, height);
+    textField.setForeground(GlobalView.PLACEHOLDER_TEXT_COLOR);
+    textField.addFocusListener(createFocusListener(textField, placeholder));
+    return textField;
+}
+
+private FocusListener createFocusListener(JTextField textField, String placeholder) {
+    return new FocusListener() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            if (textField.getText().equals(placeholder)) {
+                textField.setText("");
+                textField.setForeground(GlobalView.TEXT_COLOR);
+            }
+        }
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            if (textField.getText().isEmpty()) {
+                textField.setForeground(GlobalView.PLACEHOLDER_TEXT_COLOR);
+                textField.setText(placeholder);
+            }
+        }
+    };
 }
 }
