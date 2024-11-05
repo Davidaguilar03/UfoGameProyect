@@ -14,8 +14,8 @@ public class Ufo {
     private boolean isMoving;
     private List<Point> trajectory;
     private double lastAngle;
-    private static final int UFO_WIDTH = 75;
-    private static final int UFO_HEIGHT = 54;
+    public static final int UFO_WIDTH = 75;
+    public static final int UFO_HEIGHT = 54;
 
     public Ufo(int speed, Point position, double angle) {
         this.position = position;

@@ -3,17 +3,16 @@ package co.edu.uptc.models;
 import co.edu.uptc.pojos.Ufo;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.List;
 import java.util.Random;
 
 public class UfoController {
     private Random random;
     private UfoGameModel ufoGameModel;
-    private static final int LANDING_STRIP_X = 580;
-    private static final int LANDING_STRIP_Y = 145;
-    private static final int LANDING_STRIP_WIDTH = 80;
-    private static final int LANDING_STRIP_HEIGHT = 60;
+    private static final int LANDING_STRIP_X_MIN = 580;
+    private static final int LANDING_STRIP_X_MAX = 660;
+    private static final int LANDING_STRIP_Y_MIN = 145;
+    private static final int LANDING_STRIP_Y_MAX = 195;
 
     public UfoController(UfoGameModel ufoGameModel) {
         this.ufoGameModel = ufoGameModel;
@@ -75,9 +74,11 @@ public class UfoController {
     }
 
     private boolean checkLandingStripCollision(Ufo ufo) {
-        Rectangle landingStrip = new Rectangle(LANDING_STRIP_X, LANDING_STRIP_Y, LANDING_STRIP_WIDTH, LANDING_STRIP_HEIGHT);
-        return landingStrip.contains(ufo.getPosition());
+        Point position = ufo.getPosition();
+        return position.x >= LANDING_STRIP_X_MIN && position.x <= LANDING_STRIP_X_MAX &&
+               position.y >= LANDING_STRIP_Y_MIN && position.y <= LANDING_STRIP_Y_MAX;
     }
+    
 
     private void removeUfo(Ufo ufo, List<Ufo> allUfos) {
         allUfos.remove(ufo);
@@ -96,13 +97,12 @@ public class UfoController {
             if (distance > 0) {
                 double angle = Math.atan2(deltaY, deltaX);
                 ufo.updateAngle(angle);
-                double increasedSpeed = speed * 1.5;
-                double normalizedSpeed = Math.min(increasedSpeed, distance);
+                double normalizedSpeed = Math.min(speed, distance);
                 int moveX = (int) (normalizedSpeed * Math.cos(angle));
                 int moveY = (int) (normalizedSpeed * Math.sin(angle));
                 currentPos.translate(moveX, moveY);
 
-                if (distance <= increasedSpeed) {
+                if (distance <= speed) {
                     currentPos.setLocation(targetPos);
                     ufo.removeReachedPoint();
                 }

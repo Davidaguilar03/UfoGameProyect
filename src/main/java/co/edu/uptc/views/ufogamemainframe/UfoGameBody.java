@@ -195,7 +195,7 @@ public class UfoGameBody extends JPanel {
     }
 
     private void createTrayectoryCheckBox() {
-        trayectoryCheckbox = new JCheckBox("Mostrar la Trayectoria");
+        trayectoryCheckbox = new JCheckBox("Mostrar la Trayectoria", true); // Marcar por defecto
         trayectoryCheckbox.setBackground(GlobalView.BODY_PLAY_BACKGROUND);
         trayectoryCheckbox.setForeground(GlobalView.SECUNDARY_BTN_TEXT_BACKGROUND);
         trayectoryCheckbox.setFont(new Font("Arial", Font.BOLD, 14));
@@ -289,14 +289,14 @@ public class UfoGameBody extends JPanel {
             int ufosSpeed = Integer.parseInt(txtUfosSpeed.getText());
             ufoGameView.getPresenter().setSpeed(ufosSpeed);
         } catch (NumberFormatException e) {
-            ufoGameView.getPresenter().setSpeed(3); 
+            ufoGameView.getPresenter().setSpeed(2); 
         }
     
         try {
             int spawnRate = Integer.parseInt(txtSpawnRate.getText());
             ufoGameView.getPresenter().setSpawnRate(spawnRate);
         } catch (NumberFormatException e) {
-            ufoGameView.getPresenter().setSpawnRate(100); 
+            ufoGameView.getPresenter().setSpawnRate(1000); 
     }
       showTrajectory = trayectoryCheckbox.isSelected(); 
 }
